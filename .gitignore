@@ -1,4 +1,13 @@
+# Archivos de documentación y evaluación (no subir al repo)
+seguimiento.md
+Seguimiento.md
+PLAN_DE_DESARROLLO.md
+"Evaluación N°1 > Backend.pdf"
+Evaluacion1.iml
+
+# IDEs
 ### IntelliJ IDEA ###
+.idea/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
@@ -25,14 +34,18 @@ bin/
 ### VS Code ###
 .vscode/
 
+# Sistemas operativos
 ### Mac OS ###
 .DS_Store
 
-./PLAN_DE_DESARROLLO.md
-./Seguimiento.md
-Seguimiento.md
-PLAN_DE_DESARROLLO.md
-/Seguimiento.md
-/Evaluacion1.iml
-/Evaluación N°1 > Backend.pdf
-Evaluación N°1 > Backend.pdf
+### Windows ###
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+# Logs
+*.log
