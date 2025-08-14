@@ -55,8 +55,19 @@ Este archivo registra el progreso del desarrollo de la API REST "Gestor de Turno
 
 ---
 
-### 🔄 Siguiente: Paso 2c - Crear paquete service
-- **Objetivo:** Crear directorio para la lógica de negocio
+### ✅ Paso 2c: Crear paquete service - COMPLETADO
+- **Fecha:** 14 de Agosto, 2025
+- **Descripción:** Se creó el paquete service para la lógica de negocio
+- **Archivos creados:**
+  - `src/main/java/com/moby/evaluacion/service/` (directorio)
+  - `src/main/java/com/moby/evaluacion/service/.gitkeep` (para mantener el directorio en git)
 - **Commit sugerido:** `chore: create service package structure`
+- **Estado:** Completado
 
-**Esperando confirmación para proceder con el Paso 2c...**
+---
+
+### 🔄 Siguiente: Paso 2d - Crear paquete repository
+- **Objetivo:** Crear directorio para el acceso a datos
+- **Commit sugerido:** `chore: create repository package structure`
+
+**Esperando confirmación para proceder con el Paso 2d...**
