@@ -66,8 +66,19 @@ Este archivo registra el progreso del desarrollo de la API REST "Gestor de Turno
 
 ---
 
-### 🔄 Siguiente: Paso 2d - Crear paquete repository
-- **Objetivo:** Crear directorio para el acceso a datos
+### ✅ Paso 2d: Crear paquete repository - COMPLETADO
+- **Fecha:** 14 de Agosto, 2025
+- **Descripción:** Se creó el paquete repository para el acceso a datos
+- **Archivos creados:**
+  - `src/main/java/com/moby/evaluacion/repository/` (directorio)
+  - `src/main/java/com/moby/evaluacion/repository/.gitkeep` (para mantener el directorio en git)
 - **Commit sugerido:** `chore: create repository package structure`
+- **Estado:** Completado
 
-**Esperando confirmación para proceder con el Paso 2d...**
+---
+
+### 🔄 Siguiente: Paso 2e - Crear paquete exception
+- **Objetivo:** Crear directorio para manejo de excepciones personalizadas
+- **Commit sugerido:** `chore: create exception package structure`
+
+**Esperando confirmación para proceder con el Paso 2e...**
