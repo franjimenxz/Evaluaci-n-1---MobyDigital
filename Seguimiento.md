@@ -44,8 +44,19 @@ Este archivo registra el progreso del desarrollo de la API REST "Gestor de Turno
 
 ---
 
-### 🔄 Siguiente: Paso 2b - Crear paquete controller
-- **Objetivo:** Crear directorio para los controladores REST
+### ✅ Paso 2b: Crear paquete controller - COMPLETADO
+- **Fecha:** 14 de Agosto, 2025
+- **Descripción:** Se creó el paquete controller para los controladores REST
+- **Archivos creados:**
+  - `src/main/java/com/moby/evaluacion/controller/` (directorio)
+  - `src/main/java/com/moby/evaluacion/controller/.gitkeep` (para mantener el directorio en git)
 - **Commit sugerido:** `chore: create controller package structure`
+- **Estado:** Completado
 
-**Esperando confirmación para proceder con el Paso 2b...**
+---
+
+### 🔄 Siguiente: Paso 2c - Crear paquete service
+- **Objetivo:** Crear directorio para la lógica de negocio
+- **Commit sugerido:** `chore: create service package structure`
+
+**Esperando confirmación para proceder con el Paso 2c...**
