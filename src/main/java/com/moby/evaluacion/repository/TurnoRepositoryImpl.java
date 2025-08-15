@@ -43,7 +43,8 @@ public class TurnoRepositoryImpl implements TurnoRepository {
     @Override
     public List<Turno> findByFechaEntre(LocalDate desde, LocalDate hasta) {
         return dataSource.values().stream()
-                .filter(turno -> !turno.getFecha().isBefore(desde) && !turno.getFecha().isAfter(hasta))
+                .filter(turno -> (turno.getFecha().isEqual(desde) || turno.getFecha().isAfter(desde)) && 
+                                (turno.getFecha().isEqual(hasta) || turno.getFecha().isBefore(hasta)))
                 .collect(Collectors.toList());
     }
     
