@@ -14,6 +14,8 @@ public interface TurnoService {
     
     List<Turno> obtenerTurnosPorFecha(LocalDate fecha);
     
+    List<Turno> obtenerTurnosPorRangoFechas(LocalDate desde, LocalDate hasta);
+    
     List<Turno> obtenerTurnosPorPaciente(Long pacienteId);
     
     List<Turno> obtenerTurnosPorProfesional(Long profesionalId);

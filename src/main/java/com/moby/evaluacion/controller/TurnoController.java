@@ -34,8 +34,22 @@ public class TurnoController {
     }
     
     @GetMapping
-    public ResponseEntity<List<Turno>> obtenerTodosLosTurnos() {
-        List<Turno> turnos = turnoService.obtenerTodosLosTurnos();
+    public ResponseEntity<List<Turno>> obtenerTodosLosTurnos(
+            @RequestParam(value = "desde", required = false) String desde,
+            @RequestParam(value = "hasta", required = false) String hasta) {
+        
+        List<Turno> turnos;
+        
+        // Si me dan rango de fechas, filtro por ese rango
+        if (desde != null && hasta != null) {
+            LocalDate fechaDesde = LocalDate.parse(desde);
+            LocalDate fechaHasta = LocalDate.parse(hasta);
+            turnos = turnoService.obtenerTurnosPorRangoFechas(fechaDesde, fechaHasta);
+        } else {
+            // Si no, traigo todos
+            turnos = turnoService.obtenerTodosLosTurnos();
+        }
+        
         return new ResponseEntity<>(turnos, HttpStatus.OK);
     }
     

@@ -41,6 +41,13 @@ public class TurnoRepositoryImpl implements TurnoRepository {
     }
     
     @Override
+    public List<Turno> findByFechaEntre(LocalDate desde, LocalDate hasta) {
+        return dataSource.values().stream()
+                .filter(turno -> !turno.getFecha().isBefore(desde) && !turno.getFecha().isAfter(hasta))
+                .collect(Collectors.toList());
+    }
+    
+    @Override
     public List<Turno> findByPacienteId(Long pacienteId) {
         return dataSource.values().stream()
                 .filter(turno -> turno.getPaciente() != null && pacienteId.equals(turno.getPaciente().getId()))

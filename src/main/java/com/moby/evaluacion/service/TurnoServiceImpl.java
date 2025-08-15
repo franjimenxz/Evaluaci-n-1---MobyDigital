@@ -32,28 +32,28 @@ public class TurnoServiceImpl implements TurnoService {
     
     @Override
     public Turno crearTurno(Turno turno) {
-        // Validar que el paciente existe
+        // Primero verifico que el paciente existe
         Paciente paciente = pacienteRepository.findById(turno.getPaciente().getId())
-                .orElseThrow(() -> new RecursoNoEncontradoException("No se encontró el paciente con ID " + turno.getPaciente().getId()));
+                .orElseThrow(() -> new RecursoNoEncontradoException("No pude encontrar al paciente con ID " + turno.getPaciente().getId()));
         
-        // Validar que el profesional existe
+        // Ahora chequeo que el profesional también existe
         Profesional profesional = profesionalRepository.findById(turno.getProfesional().getId())
-                .orElseThrow(() -> new RecursoNoEncontradoException("No se encontró el profesional con ID " + turno.getProfesional().getId()));
+                .orElseThrow(() -> new RecursoNoEncontradoException("No hay ningún doctor con ID " + turno.getProfesional().getId()));
         
-        // Validar que no haya turnos duplicados (mismo paciente, profesional y fecha)
-        boolean turnoExiste = turnoRepository.existsByPacienteIdAndProfesionalIdAndFecha(
+        // Me fijo si ya hay un turno igual (mismo paciente, doctor y fecha)
+        boolean yaHayTurno = turnoRepository.existsByPacienteIdAndProfesionalIdAndFecha(
                 paciente.getId(), 
                 profesional.getId(), 
                 turno.getFecha()
         );
         
-        if (turnoExiste) {
-            throw new DatoInvalidoException("El turno ya existe para el paciente " + paciente.getNombre() + 
-                    " " + paciente.getApellido() + " con el profesional " + profesional.getNombreCompleto() + 
-                    " en la fecha " + turno.getFecha());
+        if (yaHayTurno) {
+            throw new DatoInvalidoException("Ya hay un turno programado para " + paciente.getNombre() + 
+                    " " + paciente.getApellido() + " con " + profesional.getNombreCompleto() + 
+                    " el día " + turno.getFecha());
         }
         
-        // Asignar las entidades completas al turno
+        // Todo bien, guardo el turno
         turno.setPaciente(paciente);
         turno.setProfesional(profesional);
         
@@ -62,43 +62,56 @@ public class TurnoServiceImpl implements TurnoService {
     
     @Override
     public Turno obtenerTurnoPorId(Long id) {
+        // Busco el turno específico
         return turnoRepository.findById(id)
-                .orElseThrow(() -> new RecursoNoEncontradoException("Turno con ID " + id + " no encontrado"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("No hay ningún turno con ID " + id));
     }
     
     @Override
     public List<Turno> obtenerTodosLosTurnos() {
+        // Devuelvo todos los turnos que tengo guardados
         return turnoRepository.findAll();
     }
     
     @Override
     public List<Turno> obtenerTurnosPorFecha(LocalDate fecha) {
+        // Filtro los turnos por la fecha que me piden
         return turnoRepository.findByFecha(fecha);
     }
     
     @Override
+    public List<Turno> obtenerTurnosPorRangoFechas(LocalDate desde, LocalDate hasta) {
+        // Busco turnos entre las dos fechas que me dan
+        return turnoRepository.findByFechaEntre(desde, hasta);
+    }
+    
+    @Override
     public List<Turno> obtenerTurnosPorPaciente(Long pacienteId) {
-        // Verificar que el paciente existe
+        // Primero verifico que el paciente existe
         if (!pacienteRepository.existsById(pacienteId)) {
-            throw new RecursoNoEncontradoException("Paciente con ID " + pacienteId + " no encontrado");
+            throw new RecursoNoEncontradoException("No existe un paciente con ID " + pacienteId);
         }
+        // Si existe, busco sus turnos
         return turnoRepository.findByPacienteId(pacienteId);
     }
     
     @Override
     public List<Turno> obtenerTurnosPorProfesional(Long profesionalId) {
-        // Verificar que el profesional existe
+        // Me fijo que el profesional exista
         if (!profesionalRepository.existsById(profesionalId)) {
-            throw new RecursoNoEncontradoException("Profesional con ID " + profesionalId + " no encontrado");
+            throw new RecursoNoEncontradoException("No encuentro un profesional con ID " + profesionalId);
         }
+        // Busco todos sus turnos
         return turnoRepository.findByProfesionalId(profesionalId);
     }
     
     @Override
     public void eliminarTurno(Long id) {
+        // Chequeo que el turno existe antes de borrarlo
         if (!turnoRepository.existsById(id)) {
-            throw new RecursoNoEncontradoException("Turno con ID " + id + " no encontrado");
+            throw new RecursoNoEncontradoException("No hay un turno con ID " + id + " para eliminar");
         }
+        // Lo elimino
         turnoRepository.deleteById(id);
     }
 }

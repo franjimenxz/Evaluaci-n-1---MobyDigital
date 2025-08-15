@@ -15,6 +15,8 @@ public interface TurnoRepository {
     
     List<Turno> findByFecha(LocalDate fecha);
     
+    List<Turno> findByFechaEntre(LocalDate desde, LocalDate hasta);
+    
     List<Turno> findByPacienteId(Long pacienteId);
     
     List<Turno> findByProfesionalId(Long profesionalId);
