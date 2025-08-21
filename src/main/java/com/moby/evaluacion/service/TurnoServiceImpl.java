@@ -8,6 +8,8 @@ import com.moby.evaluacion.model.Turno;
 import com.moby.evaluacion.repository.PacienteRepository;
 import com.moby.evaluacion.repository.ProfesionalRepository;
 import com.moby.evaluacion.repository.TurnoRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import java.util.List;
 @Service
 public class TurnoServiceImpl implements TurnoService {
     
+    private static final Logger logger = LoggerFactory.getLogger(TurnoServiceImpl.class);
     private final TurnoRepository turnoRepository;
     private final PacienteRepository pacienteRepository;
     private final ProfesionalRepository profesionalRepository;
@@ -32,13 +35,21 @@ public class TurnoServiceImpl implements TurnoService {
     
     @Override
     public Turno crearTurno(Turno turno) {
+        logger.info("Creando turno para fecha: {}", turno.getFecha());
+        
         // Primero verifico que el paciente existe
         Paciente paciente = pacienteRepository.findById(turno.getPaciente().getId())
-                .orElseThrow(() -> new RecursoNoEncontradoException("No pude encontrar al paciente con ID " + turno.getPaciente().getId()));
+                .orElseThrow(() -> {
+                    logger.warn("Error: paciente con ID {} no encontrado", turno.getPaciente().getId());
+                    return new RecursoNoEncontradoException("No pude encontrar al paciente con ID " + turno.getPaciente().getId());
+                });
         
         // Ahora chequeo que el profesional también existe
         Profesional profesional = profesionalRepository.findById(turno.getProfesional().getId())
-                .orElseThrow(() -> new RecursoNoEncontradoException("No hay ningún doctor con ID " + turno.getProfesional().getId()));
+                .orElseThrow(() -> {
+                    logger.warn("Error: profesional con ID {} no encontrado", turno.getProfesional().getId());
+                    return new RecursoNoEncontradoException("No hay ningún doctor con ID " + turno.getProfesional().getId());
+                });
         
         // Me fijo si ya hay un turno igual (mismo paciente, doctor y fecha)
         boolean yaHayTurno = turnoRepository.existsByPacienteIdAndProfesionalIdAndFecha(
@@ -48,6 +59,8 @@ public class TurnoServiceImpl implements TurnoService {
         );
         
         if (yaHayTurno) {
+            logger.warn("Error: ya existe turno duplicado para paciente {} con profesional {} en fecha {}", 
+                    paciente.getId(), profesional.getId(), turno.getFecha());
             throw new DatoInvalidoException("Ya hay un turno programado para " + paciente.getNombre() + 
                     " " + paciente.getApellido() + " con " + profesional.getNombreCompleto() + 
                     " el día " + turno.getFecha());
@@ -57,7 +70,10 @@ public class TurnoServiceImpl implements TurnoService {
         turno.setPaciente(paciente);
         turno.setProfesional(profesional);
         
-        return turnoRepository.save(turno);
+        Turno resultado = turnoRepository.save(turno);
+        logger.info("Turno creado exitosamente con ID: {} para {} con {}", 
+                resultado.getId(), paciente.getNombre(), profesional.getNombreCompleto());
+        return resultado;
     }
     
     @Override

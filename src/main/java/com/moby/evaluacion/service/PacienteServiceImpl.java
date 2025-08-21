@@ -3,6 +3,8 @@ package com.moby.evaluacion.service;
 import com.moby.evaluacion.exception.RecursoNoEncontradoException;
 import com.moby.evaluacion.model.Paciente;
 import com.moby.evaluacion.repository.PacienteRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import java.util.List;
 @Service
 public class PacienteServiceImpl implements PacienteService {
     
+    private static final Logger logger = LoggerFactory.getLogger(PacienteServiceImpl.class);
     private final PacienteRepository pacienteRepository;
     
     @Autowired
@@ -20,8 +23,10 @@ public class PacienteServiceImpl implements PacienteService {
     
     @Override
     public Paciente crearPaciente(Paciente paciente) {
-        // Guardo el paciente directamente
-        return pacienteRepository.save(paciente);
+        logger.info("Creando paciente: {} {}", paciente.getNombre(), paciente.getApellido());
+        Paciente resultado = pacienteRepository.save(paciente);
+        logger.info("Paciente creado con ID: {}", resultado.getId());
+        return resultado;
     }
     
     @Override
@@ -33,17 +38,20 @@ public class PacienteServiceImpl implements PacienteService {
     
     @Override
     public List<Paciente> obtenerTodosLosPacientes() {
-        // Devuelvo todos los pacientes que tengo
-        return pacienteRepository.findAll();
+        logger.info("Obteniendo todos los pacientes");
+        List<Paciente> pacientes = pacienteRepository.findAll();
+        logger.info("Encontrados {} pacientes", pacientes.size());
+        return pacientes;
     }
     
     @Override
     public void eliminarPaciente(Long id) {
-        // Primero me fijo si existe el paciente
+        logger.info("Eliminando paciente con ID: {}", id);
         if (!pacienteRepository.existsById(id)) {
+            logger.warn("No se puede eliminar - paciente con ID {} no existe", id);
             throw new RecursoNoEncontradoException("No hay ningún paciente con ID " + id + " para eliminar");
         }
-        // Si existe, lo borro
         pacienteRepository.deleteById(id);
+        logger.info("Paciente con ID {} eliminado exitosamente", id);
     }
 }
